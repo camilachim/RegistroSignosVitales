@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Registro de Signos Vitales</title>
+</h:head>
+
+<h:body style="
+    background-image: url('imagen/registro.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;">
+
+    <style>
+        /* Estilos azules (Igual que el Login) */
+        input[type="text"], select {
+            background-color: #b3d9ff;
+            border: 1px solid #7cb6fb;
+            border-radius: 5px;
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+        .titulo-paciente {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        .cuadro-transparente {
+            background-color: rgba(124, 182, 251, 0.75); /* Azul transparente */
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 3px 3px 15px rgba(0,0,0,0.4);
+            min-width: 400px;
+            max-width: 800px;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+        .fuera-rango {
+            background-color: #ffcccc !important;
+        }
+    </style>
+
+    <table width="100%" height="75%">
+        <tr>
+            <td align="center" valign="top">
+
+                <div class="cuadro-transparente">
+
+                    <div class="titulo-paciente">
+                        <h:outputText value="Paciente: #{controladorSignosVitales.paciente.nombres} #{controladorSignosVitales.paciente.apellidos}" /><br/>
+                        <h:outputText value="Cédula: #{controladorSignosVitales.paciente.identificacion}" /><br/>
+                        <h:outputText value="Edad: #{controladorSignosVitales.paciente.edad}" />
+                    </div>
+
+                    <h:form id="formAntropo">
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <h:outputLabel value="Peso (kg):"/>
+                            <p:inputText value="#{controladorSignosVitales.datosAntropometricos.peso}" required="true">
+                                <p:ajax event="keyup" update="imc"/>
+                            </p:inputText>
+
+                            <h:outputLabel value="Estatura (m):"/>
+                            <p:inputText value="#{controladorSignosVitales.datosAntropometricos.talla}" required="true">
+                                <p:ajax event="keyup" update="imc"/>
+                            </p:inputText>
+
+                            <h:outputLabel value="IMC:"/>
+                            <h:outputText id="imc" value="#{controladorSignosVitales.datosAntropometricos.imc}">
+                                <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </h:panelGrid>
+                    </h:form>
+
+                    <h:form id="formSignos">
+                        <p:messages id="mensajes" autoUpdate="true"/>
+
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <h:outputLabel value="Temperatura (°C):"/>
+                            <p:inputText value="#{controladorSignosVitales.nuevoSigno.temperaturaC}" required="true"/>
+
+                            <h:outputLabel value="Frecuencia Cardiaca (lpm):"/>
+                            <p:inputText value="#{controladorSignosVitales.nuevoSigno.frecuenciaCardiacaLpm}" required="true"/>
+
+                            <h:outputLabel value="Frecuencia Respiratoria (rpm):"/>
+                            <p:inputText value="#{controladorSignosVitales.nuevoSigno.frecuenciaRespiratoriaRpm}" required="true"/>
+
+                            <h:outputLabel value="Presión Diastólica (mmHg):"/>
+                            <p:inputText value="#{controladorSignosVitales.nuevoSigno.presionDiastolicaMmHg}" required="true"/>
+
+                            <h:outputLabel value="Presión Sistólica (mmHg):"/>
+                            <p:inputText value="#{controladorSignosVitales.nuevoSigno.presionSistolicaMmHg}" required="true"/>
+
+                            <h:outputLabel value="Saturación O₂ (%):"/>
+                            <p:inputText value="#{controladorSignosVitales.nuevoSigno.saturacionOxigeno}" required="true"/>
+                        </h:panelGrid>
+
+                        <br/>
+
+                        <div style="text-align: center;">
+                            <p:commandButton value="Guardar"
+                                             action="#{controladorSignosVitales.guardarSigno}"
+                                             update=":formSignos:mensajes :formTablaSignos:tablaSignos"
+                                             style="margin-right: 10px;"/>
+
+                            <p:button value="Evaluación Clínica"
+                                      icon="pi pi-file-edit"
+                                      outcome="evaluacion-clinica"
+                                      styleClass="ui-button-secondary">
+                                <f:param name="idPaciente" value="#{controladorSignosVitales.paciente.identificacion}" />
+                            </p:button>
+                        </div>
+
+                    </h:form>
+
+                    <br/>
+                    <p:separator/>
+                    <br/>
+
+                    <h:form id="formTablaSignos">
+                        <p:dataTable id="tablaSignos"
+                                     value="#{controladorSignosVitales.listaSignos}"
+                                     var="s"
+                                     rowStyleClass="#{!s.signosNormales() ? 'fuera-rango' : null}">
+
+                            <p:column headerText="Temperatura">#{s.temperaturaC}</p:column>
+                            <p:column headerText="FC">#{s.frecuenciaCardiacaLpm}</p:column>
+                            <p:column headerText="FR">#{s.frecuenciaRespiratoriaRpm}</p:column>
+                            <p:column headerText="PD">#{s.presionDiastolicaMmHg}</p:column>
+                            <p:column headerText="PS">#{s.presionSistolicaMmHg}</p:column>
+                            <p:column headerText="O₂">#{s.saturacionOxigeno}</p:column>
+
+                            <p:column headerText="Alerta">
+                                <h:outputText value="Fuera de Rango"
+                                              rendered="#{!s.signosNormales()}"
+                                              style="color:red;font-weight:bold;"/>
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:form>
+
+                </div> 
+                </td>
+        </tr>
+    </table>
+
+</h:body>
+</html>

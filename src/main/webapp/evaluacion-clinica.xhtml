@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:metadata>
+    <f:viewParam name="idPaciente" value="#{observacionBean.idPaciente}" />
+    <f:viewAction action="#{observacionBean.cargarDatos}" />
+</f:metadata>
+
+<h:head>
+    <title>Evaluación Clínica</title>
+</h:head>
+
+<h:body style="
+    background-image: url('imagen/registro.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;">
+
+    <style>
+        /* 1. Inputs AZULES (Estilo del Login) */
+        input[type="text"], textarea, select, .ui-inputfield, .ui-inputtextarea, .ui-selectonemenu {
+            background-color: #b3d9ff !important;
+            border: 1px solid #7cb6fb !important;
+            border-radius: 5px;
+            color: #000 !important;
+        }
+        
+        /* Ajuste para el dropdown de PrimeFaces */
+        .ui-selectonemenu .ui-selectonemenu-label {
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        /* 2. Cuadro Principal AZUL TRANSPARENTE */
+        .cuadro-transparente {
+            background-color: rgba(124, 182, 251, 0.75);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 3px 3px 15px rgba(0,0,0,0.4);
+            width: 85%;
+            max-width: 950px;
+            margin: 40px auto;
+        }
+
+        .titulo { color: #000; text-align: center; margin-bottom: 20px; font-weight: bold;}
+
+        /* 3. TABLA TRANSPARENTE */
+        .ui-datatable .ui-datatable-data tr.ui-widget-content {
+            background: transparent !important;
+            border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+        }
+        .ui-datatable .ui-datatable-header, .ui-datatable .ui-column-title {
+            background: transparent !important;
+        }
+        .ui-datatable th.ui-state-default {
+             background: rgba(255,255,255,0.2) !important; 
+             color: #000 !important;
+             border: none !important;
+        }
+    </style>
+
+    <div class="cuadro-transparente">
+        <h:form id="formObservacion">
+            <p:messages id="msgs" autoUpdate="true" closable="true"/>
+
+            <h2 class="titulo">Evaluación Clínica</h2>
+            
+            <h:panelGroup rendered="#{observacionBean.paciente != null}" style="text-align:center; display:block; margin-bottom:20px;">
+                <h:outputText value="Paciente: #{observacionBean.paciente.nombres} #{observacionBean.paciente.apellidos}" 
+                              style="font-weight:bold; font-size:1.3em; color:#000;"/>
+                <br/>
+                <h:outputText value="Cédula: #{observacionBean.paciente.identificacion}" style="color:#333;"/>
+            </h:panelGroup>
+
+            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank" columnClasses="ui-g-12 ui-md-3, ui-g-12 ui-md-9">
+                <p:outputLabel value="Tipo de Diagnóstico:" style="font-weight:bold;"/>
+                <p:selectOneMenu value="#{observacionBean.diagnostico.tipo}" style="width:100%">
+                    <f:selectItems value="#{observacionBean.tiposDiagnostico}" />
+                </p:selectOneMenu>
+
+                <p:outputLabel value="Descripción:" style="font-weight:bold;"/>
+                <p:inputTextarea value="#{observacionBean.diagnostico.descripcion}" rows="2" style="width:100%"/>
+
+                <p:outputLabel value="Observaciones:" style="font-weight:bold;"/>
+                <p:inputTextarea value="#{observacionBean.diagnostico.observacion}" rows="2" style="width:100%"/>
+
+                <p:outputLabel value="Tratamiento:" style="font-weight:bold;"/>
+                <p:inputTextarea value="#{observacionBean.diagnostico.tratamiento}" rows="2" style="width:100%"/>
+            </p:panelGrid>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <p:commandButton value="Guardar" action="#{observacionBean.guardar}" update="@form" icon="pi pi-save" style="margin-right: 10px; width: 150px;"/>
+                
+                <p:button value="Volver" outcome="registro-signos" icon="pi pi-arrow-left" styleClass="ui-button-secondary" style="width: 150px;">
+                    <f:param name="idPaciente" value="#{observacionBean.paciente.identificacion}" />
+                </p:button>
+            </div>
+
+            <p:separator/>
+            
+            <p:dataTable value="#{observacionBean.listaDiagnosticos}" var="d" emptyMessage="Sin historial." style="margin-top: 20px;">
+                
+                <p:column headerText="Fecha" width="20%" style="text-align: center;">
+                    <h:outputText value="#{d.fechaRegistro}">
+                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+                
+                <p:column headerText="Tipo" width="15%" style="text-align: center;">
+                    <h:outputText value="#{d.tipo}" />
+                </p:column>
+                <p:column headerText="Descripción">
+                    <h:outputText value="#{d.descripcion}" />
+                </p:column>
+                
+                <p:column headerText="Ver" style="width: 80px; text-align: center;">
+                    <p:button icon="pi pi-eye" outcome="detalle-diagnostico" title="Ver Reporte">
+                        <f:param name="idDiagnostico" value="#{d.id}" />
+                        <f:param name="idPaciente" value="#{observacionBean.paciente.identificacion}" />
+                    </p:button>
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+    </div>
+</h:body>
+</html>

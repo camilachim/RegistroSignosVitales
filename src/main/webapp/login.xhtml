@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+    <title>Registro de Usuarios</title>
+</h:head>
+
+<h:body style="
+    background-image: url('imagen/registro.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;">
+
+    <style>
+        input[type="text"],
+        input[type="password"],
+        textarea,
+        select {
+            background-color: #b3d9ff;
+            border: 1px solid #7cb6fb;
+            border-radius: 5px;
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+    </style>
+
+    <!-- Contenedor centrado -->
+    <table width="100%" height="75%">
+        <tr>
+            <td align="center" valign="middle">
+
+                <!-- Cuadro transparente -->
+                <div style="
+                    background-color: rgba(124, 182, 251, 0.75);
+                    padding: 30px;
+                    border-radius: 15px;
+                    box-shadow: 3px 3px 15px rgba(0,0,0,0.4);
+                    min-width: 400px;
+                    max-width: 600px;
+                    text-align: left;">
+
+                    <h1 style="text-align:center;">Usuario</h1>
+
+                    <h:form id="formLogin">
+        
+        <p:messages id="mensajes" closable="true"/>
+
+        <h:panelGrid columns="2" cellpadding="8">
+            <h:outputLabel value="Usuario:" for="usuario"/>
+            <p:inputText id="usuario" value="#{inicioBean.nombreUsuario}" required="true"
+                         requiredMessage="Ingrese el usuario"/>
+
+            <h:outputLabel value="Contraseña:" for="contrasenia"/>
+            <p:password id="contrasenia"
+                        value="#{inicioBean.contrasenia}"
+                        required="true"
+                        requiredMessage="Ingrese la contraseña"/>
+
+        </h:panelGrid>
+
+        <br/>
+                        <p:commandButton value="Ingresar"
+                                         action="#{inicioBean.iniciarSesion}"
+                                         ajax="false"
+                                         style="background-color:#4CAF50; color:white; margin-right:10px;" />
+
+
+                        <!-- Ir a registro -->
+                        <p:button value="Registrarse"
+                                  outcome="/registro.xhtml" />
+
+    </h:form>
+                </div>
+            </td>
+        </tr>
+    </table>
+</h:body>
+</html>
