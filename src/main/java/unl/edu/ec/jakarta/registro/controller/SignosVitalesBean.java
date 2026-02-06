@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import unl.edu.ec.jakarta.registro.model.Persona;
 import unl.edu.ec.jakarta.registro.model.SignosVitales;
+import unl.edu.ec.jakarta.registro.services.SignosVitalesService;
 import unl.edu.ec.jakarta.registro.model.DatosAntropometricos;
-import unl.edu.ec.jakarta.registro.model.SignosVitalesService;
 
 /**
  * @author chimbocamila29 (Camila Chimbo;

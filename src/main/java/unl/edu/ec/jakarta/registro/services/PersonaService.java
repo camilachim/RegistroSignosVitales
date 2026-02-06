@@ -1,7 +1,10 @@
-package unl.edu.ec.jakarta.registro.model;
+package unl.edu.ec.jakarta.registro.services;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import unl.edu.ec.jakarta.registro.model.JpaUtil;
+import unl.edu.ec.jakarta.registro.model.Persona;
+
 import java.util.List;
 
 /**

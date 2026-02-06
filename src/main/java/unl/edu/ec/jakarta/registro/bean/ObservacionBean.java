@@ -5,10 +5,10 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import unl.edu.ec.jakarta.registro.model.Diagnostico;
-import unl.edu.ec.jakarta.registro.model.DiagnosticoService;
 import unl.edu.ec.jakarta.registro.model.Persona;
-import unl.edu.ec.jakarta.registro.model.PersonaService;
 import unl.edu.ec.jakarta.registro.model.TipoDiagnostico;
+import unl.edu.ec.jakarta.registro.services.DiagnosticoService;
+import unl.edu.ec.jakarta.registro.services.PersonaService;
 
 import java.io.Serializable;
 import java.util.List;

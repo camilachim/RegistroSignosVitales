@@ -6,7 +6,7 @@ import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.List;
 import unl.edu.ec.jakarta.registro.model.Persona;
-import unl.edu.ec.jakarta.registro.model.PersonaService;
+import unl.edu.ec.jakarta.registro.services.PersonaService;
 import jakarta.faces.context.FacesContext;
 
 /**
